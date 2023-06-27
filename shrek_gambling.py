@@ -4,7 +4,7 @@ import time
 
 # The dictionary of tokens and token values from which one will be randomly selected
 # The lower value items are repeated to decrease the cance of getting the Shrek token
-tokens = {"Shrek": 4, "Puss in Boots" : 0.5, "Puss in Boots" : 0.5, "Donkey" : 0.5, "Donkey" : 0.5, "Lord Farquad" : 0, "Lord Farquad" : 0, "Lord Farquad" : 0, "Lord Farquad" : 0, "Lord Farquad" : 0, "Lord Farquad" : 0}
+tokens = ["Shrek", "Puss in Boots", "Puss in Boots", "Donkey", "Donkey", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad"]
 
 total_spent = 0
 total_earnings = 0
@@ -31,6 +31,12 @@ while True:
             print("You have reached the maximum amount you can spend on this game. Goodbye!")
             break
 
+        # Sets the maximum spend amount to $5 if the total spent is less than or equal to $5, or to 10 - total spent if the total spent is greater than $5
+        max_spend = 10 - total_spent if total_spent > 5 else 5
+
+        # Tells the user how much they have spent and earned so far
+        print(f"Currently, you have spent ${'{:.2f}'.format(total_spent)} and made ${'{:.2f}'.format(total_earnings)}")
+
         # Asks the user to enter their starting bet
         bet = input("Press enter your bet or type 'quit' to exit:  ")
 
@@ -43,12 +49,12 @@ while True:
 
     # This means if there is a value error, like if the user puts letters in the input, an error message will be sent, and the loop will restart
     except ValueError:
-        print(f"Please enter a whole number between 1 and {max_spend} or type 'quit' to exit")
+        print("Bet amount must be a whole number between 1 and 5 or type 'quit' to exit")
         continue
 
     # If the bet is out of the range, an error message will be sent, and the loop will restart
     if bet < 1 or bet > 5:
-        print(f"Please enter a whole number between 1 and {max_spend} or type 'quit' to exit")
+        print("Bet amount must be a whole number between 1 and 5 or type 'quit' to exit")
         continue
 
     # If the chosen bet would cause the user to spend more than $10, The bet will not be allowed, and the while loop will restart
@@ -66,19 +72,39 @@ while True:
     time.sleep(1)
 
     # Selects a random token from the dictionary of tokens and token values
-    token = random.choice(list(tokens.keys()))
+    token = random.choice(tokens)
 
     # Prints the token to the user
     print("Your token is a " + str(token))
 
-    # Sets the value of the prize, based off of what token was chosen
-    prize = bet * tokens[token]
+    # Shows the message and the prize amount to the user, depending on what token was selected
     if token == "Shrek":
+        # Sets the value of the prize, based off of what token was chosen
+        prize = bet * 4
+
+        # Adds the prize amount to the total earnings
+        total_earnings += prize
+
+        # Prints the prize amount to the user
         print(f"You have won ${prize}! Well done!")
         continue
     elif token == "Puss in Boots" or token == "Donkey":
-        print(f"You have won ${prize}")
-    print("You have not won anything, maybe next time!")
-    
+        # Sets the value of the prize, based off of what token was chosen
+        prize = bet * 0.5
 
-    
+        # Adds the prize amount to the total earnings
+        total_earnings += prize
+
+        # Prints the prize amount to the user either in dollars, if the prize is greater than $1, or in cents if the prize is less than $1
+        if prize > 1:
+            print(f"You have won ${prize}")
+            continue
+        else:
+            print(f"You have won {prize * 100}c")
+        continue
+
+    # Tells the user that nothing was won
+    print("You have not won anything, maybe next time!")
+
+# When the while loop is exited, the total earnings and spent amount will be printed to the user
+print(f"Thanks for playing! You earned ${'{:.2f}'.format(total_earnings)} and spent ${'{:.2f}'.format(total_spent)}")
