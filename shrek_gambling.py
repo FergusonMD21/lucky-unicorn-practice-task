@@ -1,10 +1,12 @@
-# Imports the libraries useed in the program
+# Imports the libraries used in the program
+# The random library is used to pick a random token from the list
+# The time library is used to wait time so not everything happens at once
 import random
 import time
 
 # The dictionary of tokens and token values from which one will be randomly selected
 # The lower value items are repeated to decrease the cance of getting the Shrek token
-tokens = ["Shrek", "Puss in Boots", "Puss in Boots", "Donkey", "Donkey", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad"]
+tokens = ["Shrek", "Puss in Boots", "Puss in Boots", "Puss in Boots", "Donkey", "Donkey", "Donkey", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad", "Lord Farquad"]
 
 total_spent = 0
 total_earnings = 0
