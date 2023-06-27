@@ -12,26 +12,17 @@ total_spent = 0
 total_earnings = 0
 max_spend = 5
 
-# Explains Shrek Gambling to the user with a 1 second delay between each set of text
-print("Welcome to Shrek Gambling!")
-time.sleep(1)
-print("To play, you must first enter your starting amount. This can be a number from $1 to $5, but the most you can spend on this game in total is $10.")
-time.sleep(1)
-print("You will then recieve token which is either a Shrek, Puss in Boots, Donkey, or Lord Farquad")
-time.sleep(1)
-print("A Shrek will earn 4 times your bet, a Donkey or a Puss in Boots will earn half your bet, and a Lord Farquad will earn nothing")
-
-# Will repeat until the user quits or until the maximum spend has been reached
-while True:
-    # Waits one second
-    time.sleep(1)
+# Functions
+def get_bet():
+    # Imports global variables
+    global total_spent, restart_loop, max_spend, total_earnings
 
     # This means if there is an error, the program will not stop, and instead go to the except condition
     try:
         # Ensures that the user cannot spend more than $10
         if total_spent >= 10:
             print("You have reached the maximum amount you can spend on this game. Goodbye!")
-            break
+            quit()
 
         # Sets the maximum spend amount to $5 if the total spent is less than or equal to $5, or to 10 - total spent if the total spent is greater than $5
         max_spend = 10 - total_spent if total_spent > 5 else 5
@@ -44,7 +35,7 @@ while True:
 
         # If the user enters 'quit', the program will exit
         if bet == "quit":
-            break
+            quit()
 
         # Sets the bet to an integer
         bet = int(bet)
@@ -52,23 +43,51 @@ while True:
     # This means if there is a value error, like if the user puts letters in the input, an error message will be sent, and the loop will restart
     except ValueError:
         print("Bet amount must be a whole number between 1 and 5 or type 'quit' to exit")
-        continue
+        restart_loop = True
+        return restart_loop
 
     # If the bet is out of the range, an error message will be sent, and the loop will restart
     if bet < 1 or bet > 5:
         print("Bet amount must be a whole number between 1 and 5 or type 'quit' to exit")
-        continue
+        restart_loop = True
+        return restart_loop
 
     # If the chosen bet would cause the user to spend more than $10, The bet will not be allowed, and the while loop will restart
     if bet > max_spend:
         print(f"You cannot spend this amount, as it will take you over $10. The maximum you can spend is {max_spend}")
-        continue
+        restart_loop = True
+        return restart_loop
 
     # Adds the bet to the total spent, so the program can know if the user has spent too much
     total_spent += bet
 
     # Tells the user how much was bet
     print("You have bet $" + str(bet))
+
+    return bet
+
+# Explains Shrek Gambling to the user with a 1 second delay between each set of text
+print("Welcome to Shrek Gambling!")
+time.sleep(1)
+print("To play, you must first enter your starting amount. This can be a number from $1 to $5, but the most you can spend on this game in total is $10.")
+time.sleep(1)
+print("You will then recieve token which is either a Shrek, Puss in Boots, Donkey, or Lord Farquad")
+time.sleep(1)
+print("A Shrek will earn 4 times your bet, a Donkey or a Puss in Boots will earn half your bet, and a Lord Farquad will earn nothing")
+
+# Will repeat until the user quits or until the maximum spend has been reached
+while True:
+    restart_loop = False
+
+    # Waits one second
+    time.sleep(1)
+
+    if (bet := get_bet()) == True:
+        continue
+    
+    # If the function decides to restart the loop, the loop will return the the top
+    if restart_loop == True:
+        continue
 
     # Wait one second
     time.sleep(1)
