@@ -21,7 +21,14 @@ def get_bet():
     try:
         # Ensures that the user cannot spend more than $10
         if total_spent >= 10:
-            print("You have reached the maximum amount you can spend on this game. Goodbye!")
+            print("You have reached the maximum amount you can spend on this game.")
+
+            time.sleep(1)
+
+            # When the game loop is exited, the total earnings and spent amount will be printed to the user
+            print(f"Thanks for playing! You earned ${'{:.2f}'.format(total_earnings)} and spent ${'{:.2f}'.format(total_spent)}")
+
+            # Exit the program
             quit()
 
         # Sets the maximum spend amount to $5 if the total spent is less than or equal to $5, or to 10 - total spent if the total spent is greater than $5
@@ -34,11 +41,19 @@ def get_bet():
         bet = input("Press enter your bet or type 'quit' to exit:  ")
 
         # If the user enters 'quit', the program will exit
-        if bet == "quit":
+        if bet == "quit":         
+            profit_loss = "profit" if total_earnings > total_spent else "loss"
+
+            # When the game loop is exited, the total earnings and spent amount will be printed to the user
+            print(f"Thanks for playing! You earned ${'{:.2f}'.format(total_earnings)} and spent ${'{:.2f}'.format(total_spent)}, giving you a {profit_loss} of ${}")
+
+            time.sleep(1)
+
+            # Quits the program
             quit()
 
         # Sets the bet to an integer
-        bet = int(bet)
+        bet = round(float(bet), 2)
 
     # This means if there is a value error, like if the user puts letters in the input, an error message will be sent, and the loop will restart
     except ValueError:
@@ -66,6 +81,40 @@ def get_bet():
 
     return bet
 
+def shrek(bet):
+    # Imports total_earnings from global scope
+    global total_earnings
+
+    # Sets the value of the prize, based off of what token was chosen
+    prize = bet * 4
+
+    # Adds the prize amount to the total earnings
+    total_earnings += prize
+
+    # Prints the prize amount to the user
+    print(f"You have won ${prize}! Well done!")
+
+def puss_or_donkey(bet):
+    # Imports total_earnings from global scope
+    global total_earnings
+
+    # Sets the value of the prize, based off of what token was chosen
+    prize = round((bet * 0.5), 2)
+
+    # Adds the prize amount to the total earnings
+    total_earnings += prize
+
+    # Prints the prize amount to the user either in dollars, if the prize is greater than $1, or in cents if the prize is less than $1
+    if prize >= 1:
+        print(f"You have won ${prize}")
+    else:
+        print(f"You have won {prize * 100}c")
+
+def farquad(bet):
+    # Tells the user that nothing was won
+    print(f"Sorry, you lost your bet of ${bet}. Maybe you'll win next time")
+
+
 # Explains Shrek Gambling to the user with a 1 second delay between each set of text
 print("Welcome to Shrek Gambling!")
 time.sleep(1)
@@ -84,10 +133,6 @@ while True:
 
     if (bet := get_bet()) == True:
         continue
-    
-    # If the function decides to restart the loop, the loop will return the the top
-    if restart_loop == True:
-        continue
 
     # Wait one second
     time.sleep(1)
@@ -100,32 +145,8 @@ while True:
 
     # Shows the message and the prize amount to the user, depending on what token was selected
     if token == "Shrek":
-        # Sets the value of the prize, based off of what token was chosen
-        prize = bet * 4
-
-        # Adds the prize amount to the total earnings
-        total_earnings += prize
-
-        # Prints the prize amount to the user
-        print(f"You have won ${prize}! Well done!")
-        continue
+        shrek(bet)
     elif token == "Puss in Boots" or token == "Donkey":
-        # Sets the value of the prize, based off of what token was chosen
-        prize = bet * 0.5
-
-        # Adds the prize amount to the total earnings
-        total_earnings += prize
-
-        # Prints the prize amount to the user either in dollars, if the prize is greater than $1, or in cents if the prize is less than $1
-        if prize > 1:
-            print(f"You have won ${prize}")
-            continue
-        else:
-            print(f"You have won {prize * 100}c")
-        continue
-
-    # Tells the user that nothing was won
-    print("You have not won anything, maybe next time!")
-
-# When the while loop is exited, the total earnings and spent amount will be printed to the user
-print(f"Thanks for playing! You earned ${'{:.2f}'.format(total_earnings)} and spent ${'{:.2f}'.format(total_spent)}")
+        puss_or_donkey(bet)
+    else:
+        farquad(bet)
